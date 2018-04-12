@@ -1,0 +1,52 @@
+# auto accept minion keys (UNSAFE)
+auto_accept: True
+
+# set output to detailed on failure
+state_output: mixed
+
+#set remote states and pillars
+fileserver_backend:
+  - git
+
+gitfs_provider: gitpython
+
+gitfs_remotes:
+  - git://github.com/llevar/eosc_pilot.git:
+    - root: configuration/salt/state
+    - base: master
+  - git://github.com/llevar/butler.git:
+    - root: configuration/salt/state
+    - base: master
+
+#
+pillar_roots:
+  base:
+    - /srv/pillar
+
+top_file_merging_strategy: same
+default_top: base
+
+ext_pillar:
+#  - hiera: /etc/hiera.yaml
+#  - cmd_yaml: cat /etc/salt/yaml
+#Pillar overrides are in reverse order in order to work as expected
+  - git:
+    - master git://github.com/llevar/butler.git:
+      - root: configuration/salt/pillar
+      - env: base
+    - master git://github.com/llevar/eosc_pilot.git:
+      - root: configuration/salt/pillar
+      - env: base
+
+external_auth:
+  auto:
+    butler_admin:
+      - .*
+      - '@runner'
+      - '@wheel'
+      - '@jobs'
+
+rest_cherrypy:
+  port: 8000
+  host: 0.0.0.0
+  disable_ssl: True    

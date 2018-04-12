@@ -1,0 +1,6 @@
+terraform.tf*
+
+*credentials*
+*tfstate*
+*.tfvars
+*openrc.sh
