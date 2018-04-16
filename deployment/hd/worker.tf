@@ -19,13 +19,13 @@ resource "openstack_compute_instance_v2" "worker" {
 	 	agent = true
 	}
 	
-	block_device {
+	/*block_device {
 		source_type           = "blank"
 		destination_type      = "volume"
 		volume_size           = 300
-		boot_index            = 1
+		boot_index            = 0
 		delete_on_termination = true
-	}
+	}*/
 
 	count = "${var.worker_count}"
 	key_pair = "${var.key_pair}"

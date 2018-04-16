@@ -33,11 +33,11 @@ variable "bastion_host" {
 }
 
 variable "bastion_user" {
-	default = "ubuntu"
+	default = "centos"
 }
 
 variable "image_id" {
-	default = "504f1898-6ac3-4aa5-a4bd-348057a82f01"
+	default = "266ca351-ba88-48b4-9aa7-e4b3703197d9"
 }
 
 variable "user" {
@@ -57,7 +57,7 @@ variable "main_network_id" {
 }
 
 variable "worker_count" {
-	default="1"
+	default="3"
 }
 
 variable "salt-master-flavor" {
