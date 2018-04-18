@@ -1,3 +1,12 @@
+resource "openstack_networking_floatingip_v2" "float_ip" {
+	pool = "public-2"
+	count = "${var.worker_count}"
+}
+
+resource "openstack_compute_floatingip_associate_v2" "float_ip" {
+	floating_ip = "${openstack_networking_floatingip_v2.float_ip.address}"
+	instance_id = "${openstack_compute_instance_v2.worker.id}"
+}
 
 resource "openstack_compute_instance_v2" "worker" {
 
@@ -12,11 +21,11 @@ resource "openstack_compute_instance_v2" "worker" {
 	}
 	connection {
 		user = "${var.user}"
-	 	private_key = "${file(var.key_file)}"
-	 	bastion_private_key = "${file(var.key_file)}"
-	 	bastion_host = "${var.bastion_host}"
-	 	bastion_user = "${var.bastion_user}"
-	 	agent = true
+		private_key = "${file(var.key_file)}"
+		bastion_private_key = "${file(var.key_file)}"
+		bastion_host = "${var.bastion_host}"
+		bastion_user = "${var.bastion_user}"
+		agent = true
 	}
 	
 	/*block_device {
@@ -29,16 +38,26 @@ resource "openstack_compute_instance_v2" "worker" {
 
 	count = "${var.worker_count}"
 	key_pair = "${var.key_pair}"
-
-	provisioner "file" {
-	  source = "salt_setup.sh"
-	  destination = "/tmp/salt_setup.sh"
-	}
-	provisioner "remote-exec" {
-	  inline = [
-	    "chmod +x /tmp/salt_setup.sh",
-	    "/tmp/salt_setup.sh ${null_resource.masterip.triggers.address} worker-${count.index} \"worker, consul-client, ebi\""
-	  ]
-	}
 }
 
+resource "null_resource" "worker" {
+	depends_on = ["openstack_compute_instance_v2.worker"]
+	connection {
+		user = "${var.user}"
+		private_key = "${file(var.key_file)}"
+		bastion_private_key = "${file(var.key_file)}"
+		bastion_host = "${var.bastion_host}"
+		bastion_user = "${var.bastion_user}"
+		agent = true
+	}
+	provisioner "file" {
+		source = "salt_setup.sh"
+		destination = "/tmp/salt_setup.sh"	
+	}
+	provisioner "remote-exec" {
+		inline = [
+		"chmod +x /tmp/salt_setup.sh",
+		"/tmp/salt_setup.sh ${null_resource.masterip.triggers.address} worker-${count.index} \"worker, consul-client, ebi\""
+		]
+	}
+}
