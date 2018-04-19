@@ -25,7 +25,9 @@ base:
     - butler.tracker
     - butler.deploy.example-workflows
     - cwltool
-    - docker    
+    - docker
+    - nfs-shares
+    - block-volumes
   'G@roles:tracker':
     - git
     - run-tracking-db.set_db_url

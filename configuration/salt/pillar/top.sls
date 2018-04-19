@@ -24,4 +24,5 @@ base:
       - consul.server   
   'G@roles:single-node':
     - consul.single_node
-
+  'G@roles:monitoring-server and G@roles:denbi_hd':
+    - denbi_hd  
