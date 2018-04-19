@@ -65,7 +65,7 @@ variable "salt-master-flavor" {
 }
 
 variable "worker-flavor" {
-	default="HD-c8r32"
+	default="HD-c32r124"
 }
 
 variable "db-server-flavor" {
