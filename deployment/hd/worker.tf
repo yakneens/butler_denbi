@@ -9,13 +9,13 @@ resource "openstack_compute_floatingip_associate_v2" "float_ip" {
 }
 
 resource "openstack_blockstorage_volume_v2" "butler_volumes" {
-  count = ${var.worker_count}
-  name  = "${format("butler_worker_volume_%02d", count.index + 1)}"
-  size  = 350
+	count = "${var.worker_count}"
+	name  = "${format("butler_worker_volume_%02d", count.index)}"
+	size  = 350
 }
 
 resource "openstack_compute_volume_attach_v2" "attachments" {
-	count = ${var.worker_count}
+	count = "${var.worker_count}"
 	instance_id = "${element(openstack_compute_instance_v2.worker.*.id, count.index)}"
 	volume_id = "${element(openstack_blockstorage_volume_v2.butler_volumes.*.id, count.index)}"
 }
