@@ -57,7 +57,7 @@ variable "main_network_id" {
 }
 
 variable "worker_count" {
-	default="3"
+	default="30"
 }
 
 variable "salt-master-flavor" {

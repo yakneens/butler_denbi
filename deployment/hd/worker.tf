@@ -3,9 +3,10 @@ resource "openstack_networking_floatingip_v2" "float_ip" {
 	count = "${var.worker_count}"
 }
 
-resource "openstack_compute_floatingip_associate_v2" "float_ip" {
-	floating_ip = "${openstack_networking_floatingip_v2.float_ip.address}"
-	instance_id = "${openstack_compute_instance_v2.worker.id}"
+resource "openstack_compute_floatingip_associate_v2" "float_ip_mapping" {
+	count = "${var.worker_count}"
+	floating_ip = "${element(concat(openstack_networking_floatingip_v2.float_ip.*.address, list("")), count.index)}"
+	instance_id = "${element(concat(openstack_compute_instance_v2.worker.*.id, list("")), count.index)}"
 }
 
 resource "openstack_blockstorage_volume_v2" "butler_volumes" {
