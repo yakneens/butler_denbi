@@ -7,7 +7,7 @@ sudo yum install epel-release -y
 sudo yum install wget yum-plugin-priorities -y
 sudo yum install -y https://repo.saltstack.com/yum/redhat/salt-repo-latest-2.el7.noarch.rpm
 sudo yum clean expire-cache
-sudo pip install tornado==4.2.1 -U
+sudo pip install tornado==4.2.1 -y
 sudo yum install salt-minion -y
 sudo service salt-minion stop
 echo "master: $1" | sudo tee  -a /etc/salt/minion
